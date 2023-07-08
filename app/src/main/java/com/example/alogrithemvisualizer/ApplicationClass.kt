@@ -1,6 +1,7 @@
 package com.example.alogrithemvisualizer
 
 import android.app.Application
+import com.example.alogrithemvisualizer.sort.SortViewModel
 import com.example.alogrithemvisualizer.tree.TreeVisualizerViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -15,6 +16,7 @@ class ApplicationClass : Application() {
             modules(
                 module {
                     viewModel { TreeVisualizerViewModel() }
+                    viewModel { SortViewModel() }
                 }
             )
         }
