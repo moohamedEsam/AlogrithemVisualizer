@@ -39,28 +39,41 @@ import com.example.alogrithemvisualizer.DraggableCanvas
 import org.koin.androidx.compose.koinViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TreeVisualizerScreen(viewModel: TreeVisualizerViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsState()
     Box(modifier = Modifier.fillMaxSize()) {
         TreeVisualizerScreen(state)
-        Row(modifier = Modifier.align(Alignment.BottomStart)) {
-            OutlinedTextField(
-                value = state.value,
-                onValueChange = { viewModel.handleEvent(TreeVisualizerScreenEvent.UpdateValue(it)) },
-                modifier = Modifier.weight(1f),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-            IconButton(onClick = { viewModel.handleEvent(TreeVisualizerScreenEvent.AddNode) }) {
-                Icon(Icons.Default.Add, contentDescription = "Add node")
-            }
-            IconButton(onClick = { viewModel.handleEvent(TreeVisualizerScreenEvent.Search) }) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
-            }
-            IconButton(onClick = { viewModel.handleEvent(TreeVisualizerScreenEvent.Delete) }) {
-                Icon(Icons.Default.Delete, contentDescription = "Delete")
-            }
+        ActionRow(
+            state = state,
+            onEvent = viewModel::handleEvent,
+            modifier = Modifier.align(Alignment.BottomStart)
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ActionRow(
+    state: TreeVisualizerScreenState,
+    onEvent: (TreeVisualizerScreenEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        OutlinedTextField(
+            value = state.value,
+            onValueChange = { onEvent(TreeVisualizerScreenEvent.UpdateValue(it)) },
+            modifier = Modifier.weight(1f),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        IconButton(onClick = { onEvent(TreeVisualizerScreenEvent.AddNode) }) {
+            Icon(Icons.Default.Add, contentDescription = "Add node")
+        }
+        IconButton(onClick = { onEvent(TreeVisualizerScreenEvent.Search) }) {
+            Icon(Icons.Default.Search, contentDescription = "Search")
+        }
+        IconButton(onClick = { onEvent(TreeVisualizerScreenEvent.Delete) }) {
+            Icon(Icons.Default.Delete, contentDescription = "Delete")
         }
     }
 }

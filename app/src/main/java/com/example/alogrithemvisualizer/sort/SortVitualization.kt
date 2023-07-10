@@ -85,17 +85,8 @@ private fun DrawScope.sortGraph(
         color = color,
         strokeWidth = 15f
     )
-    repeat(11) {
-        val textResult = textMeasurer.measure(AnnotatedString((it * 1000).toString()))
-        drawText(
-            textResult,
-            topLeft = Offset(
-                150f - textResult.size.width - 40f,
-                (size.height / 4) + startY - textResult.size.height - it * 45f
-            ),
-            color = color
-        )
-    }
+    drawScales(textMeasurer, startY, color)
+
     data.values.forEachIndexed { index, value ->
         val x = 150f + (index + 1) * 10f
         val y = (size.height / 4) + startY - value / 20f
@@ -127,6 +118,25 @@ private fun DrawScope.sortGraph(
         color = color
     )
     return size.height / 4 + startY
+}
+
+@OptIn(ExperimentalTextApi::class)
+private fun DrawScope.drawScales(
+    textMeasurer: TextMeasurer,
+    startY: Float,
+    color: Color
+) {
+    repeat(11) {
+        val textResult = textMeasurer.measure(AnnotatedString((it * 1000).toString()))
+        drawText(
+            textResult,
+            topLeft = Offset(
+                150f - textResult.size.width - 40f,
+                (size.height / 4) + startY - textResult.size.height - it * 45f
+            ),
+            color = color
+        )
+    }
 }
 
 @Preview(showBackground = true)

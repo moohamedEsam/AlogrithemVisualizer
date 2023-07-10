@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
@@ -16,10 +17,15 @@ import kotlin.time.measureTime
 class SortViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(SortVisualizationState())
     val uiState = _uiState.asStateFlow()
-    private val waitDuration = (200).milliseconds
+    private val waitDuration = (300).milliseconds
 
     init {
-        _uiState.value = SortVisualizationState()
+        val values = IntArray(100) { Random.nextInt(100, 10000) }
+        _uiState.value = SortVisualizationState(
+            bubbleSort = SortVisualizationState.SortData(values = values.toMutableList()),
+            insertionSort = SortVisualizationState.SortData(values = values.toMutableList()),
+            selectionSort = SortVisualizationState.SortData(values = values.toMutableList()),
+        )
         viewModelScope.launch {
             delay((1).seconds)
             launch {
